@@ -5,7 +5,8 @@
 [![Code Climate](https://codeclimate.com/github/kahwee/backbone-deep-model/badges/gpa.svg)](https://codeclimate.com/github/kahwee/backbone-deep-model)
 [![npm version](https://badge.fury.io/js/%40kahwee%2Fbackbone-deep-model.svg)](https://badge.fury.io/js/%40kahwee%2Fbackbone-deep-model)
 
-Forked from https://github.com/powmedia/backbone-deep-model (Thanks for the wonderful work @powmedia!)
+Forked from https://github.com/kahwee/backbone-deep-model which is a fork of https://github.com/powmedia/backbone-deep-model.
+  * Thanks for the wonderful work @powmedia and @kahwee!
 
 The test cases are rewritten. This is primarily a browserify package. I'll work on making this work in other platforms if there is interest.
 
@@ -25,7 +26,7 @@ Installation
 ============
 
 1. Include Backbone and it's dependencies in your page/app.
-2. Include `dist/backbone-deep-model.min.js`
+2. Include `dist/backbone-deep-model.umd.min.js`
 
 Usage
 =====
@@ -76,7 +77,8 @@ console.log(model.get('otherSpies.0.name')) //'Lana'
 Author
 ======
 
-Charles Davison - [powmedia](http://github.com/powmedia)
+Charles Davison - [powmedia](http://github.com/powmedia)   
+Lee Davis - [leegdavis](https://github.com/LeeGDavis)
 
 
 Contributors
@@ -88,8 +90,17 @@ Contributors
 
 Changelog
 =========
+2.0.3:
+* Fixed UMD Loading issues.
+* Added ES and IIFE variants as well.
+* Updated to ES6 Modules.
+    * Main Source and Tests.
+* Migrated to rollup for packaging.
+    * Nuked Gulp.
+* Updated test coverage to C8.
+* Version bump to v2.0.3.
 
-master:
+2.0.2:
 * Lodash v3.x.x support.
 * Significant refactor
 * Add supprt for arrays in nested attributes (sqren)

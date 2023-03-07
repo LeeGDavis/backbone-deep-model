@@ -1,13 +1,13 @@
 'use strict';
-var DeepModel = require('../');
-var expect = require('chai').expect;
-var bioData = require('./fixtures/bioData.json');
+import DeepModel from "../src/backbone-deep-model.mjs";
+import { expect } from "chai";
+import bioData from './fixtures/bioData.json' assert { type: 'json' };
 
 describe('DeepModel', function() {
 	describe('#unset all', function() {
-		var model = new DeepModel(bioData);
+		const model = new DeepModel(bioData);
 
-		var triggeredEvents = [];
+		const triggeredEvents = [];
 		before(function() {
 
 			model.on('all', function(changedAttr, model, val) {
@@ -35,7 +35,7 @@ describe('DeepModel', function() {
 	describe('#unset', function() {
 
 		it('unset: Unset a root key', function() {
-			var model = new DeepModel(bioData);
+			const model = new DeepModel(bioData);
 			model.unset('user');
 			expect(model.get('user')).to.be.undefined;
 			expect(model.toJSON()).to.deep.equal({
@@ -44,7 +44,7 @@ describe('DeepModel', function() {
 		});
 
 		it('unset: Unset a deep key', function() {
-			var model = new DeepModel(bioData);
+			const model = new DeepModel(bioData);
 			model.unset('user.type');
 
 			expect(model.get('user')).to.deep.equal({
@@ -66,7 +66,7 @@ describe('DeepModel', function() {
 		});
 
 		it('unset: Unset a non-existent key', function() {
-			var model = new DeepModel(bioData);
+			const model = new DeepModel(bioData);
 			model.unset('foo.bar');
 
 			expect(model.get('user')).to.deep.equal({
@@ -90,7 +90,7 @@ describe('DeepModel', function() {
 		});
 
 		it('unset: Unset a non-existent deep key', function() {
-			var model = new DeepModel(bioData);
+			const model = new DeepModel(bioData);
 			model.unset('user.name.middle');
 
 			expect(model.get('user')).to.deep.equal({
@@ -114,7 +114,7 @@ describe('DeepModel', function() {
 		});
 
 		it('unset: Unset a deeper key', function() {
-			var model = new DeepModel(bioData);
+			const model = new DeepModel(bioData);
 			model.unset('user.name.last');
 
 			expect(model.get('user')).to.deep.equal({
@@ -136,7 +136,7 @@ describe('DeepModel', function() {
 		});
 
 		it('unset: Triggers model change:[attribute] events', function(done) {
-			var model = new DeepModel(bioData);
+			const model = new DeepModel(bioData);
 			model.on('change:id', function(model, val) {
 				expect(val).to.be.undefined;
 				done();
@@ -145,7 +145,7 @@ describe('DeepModel', function() {
 		});
 
 		it('unset: Triggers model change:[attribute] events', function(done) {
-			var model = new DeepModel(bioData);
+			const model = new DeepModel(bioData);
 			model.on('change:user.name.first', function(model, val) {
 				expect(val).to.be.undefined;
 				done();

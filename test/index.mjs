@@ -1,13 +1,13 @@
 'use strict';
-var DeepModel = require('../');
-var expect = require('chai').expect;
-var bioData = require('./fixtures/bioData.json');
+import DeepModel from "../src/backbone-deep-model.mjs";
+import { expect } from "chai";
+import bioData from './fixtures/bioData.json' assert { type: 'json' };
 
 describe('DeepModel', function() {
 
 	describe('basic setting and stuff', function() {
 		it('should get: Gets nested attribute values', function() {
-			var model = new DeepModel(bioData);
+			const model = new DeepModel(bioData);
 			expect(model.get('id')).to.equal(123)
 			expect(model.get('user')).to.deep.equal(bioData.user);
 			expect(model.get('user.type')).to.equal('Spy');
@@ -17,7 +17,7 @@ describe('DeepModel', function() {
 
 
 		it('get: Gets nested attribute values from arrays', function() {
-			var model = new DeepModel({
+			const model = new DeepModel({
 				spies: [{
 					name: 'Sterling'
 				}, {
@@ -31,7 +31,7 @@ describe('DeepModel', function() {
 
 
 		it('get: Gets attributes if empty objects', function() {
-			var model = new DeepModel({
+			const model = new DeepModel({
 				foo: {},
 				bar: []
 			});
@@ -43,7 +43,7 @@ describe('DeepModel', function() {
 
 
 		it("set: Sets nested values given a path", function() {
-			var model = new DeepModel();
+			const model = new DeepModel();
 
 			model.set({
 				id: 456
@@ -99,7 +99,7 @@ describe('DeepModel', function() {
 
 
 		it('set: Sets a single value - not nested', function() {
-			var model = new DeepModel();
+			const model = new DeepModel();
 
 			model.set('id', 456);
 
@@ -108,7 +108,7 @@ describe('DeepModel', function() {
 
 
 		it('set: Sets a single value - nested', function() {
-			var model = new DeepModel();
+			const model = new DeepModel();
 
 			model.set('user.type', 'Admin');
 			model.set('user.name.first', 'Foo');
@@ -118,7 +118,7 @@ describe('DeepModel', function() {
 		});
 
 		it('set: Sets a single value inside null to create an object', function() {
-			var model = new DeepModel();
+			const model = new DeepModel();
 
 			model.set('user', null);
 			model.set('user.type', 'Admin');
@@ -128,7 +128,7 @@ describe('DeepModel', function() {
 
 
 		it('set: Sets a single value inside null to create an object when given an object', function() {
-			var model = new DeepModel();
+			const model = new DeepModel();
 			model.set('user', null);
 			model.set({
 				user: {
@@ -141,8 +141,8 @@ describe('DeepModel', function() {
 
 
 		it("set: Sets values when given an object", function() {
-			var model = new DeepModel();
-			var newValues = {
+			const model = new DeepModel();
+			const newValues = {
 				id: 456,
 				user: {
 					type: 'Agent',
@@ -157,11 +157,11 @@ describe('DeepModel', function() {
 		});
 
 		it('set: Can set an object in place of a child non-object value', function() {
-			var model = new DeepModel({
+			const model = new DeepModel({
 				id: 123,
 				name: ''
 			});
-			var newName = {
+			const newName = {
 				first: 'Burt',
 				last: 'Reynolds'
 			};
@@ -172,7 +172,7 @@ describe('DeepModel', function() {
 
 
 		it("set: Don't convert Date objects to strings", function() {
-			var model = new DeepModel();
+			const model = new DeepModel();
 			model.set({
 				date: new Date
 			});

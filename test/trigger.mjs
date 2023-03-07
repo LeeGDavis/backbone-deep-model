@@ -1,12 +1,12 @@
 'use strict';
-var DeepModel = require('../');
-var expect = require('chai').expect;
-var bioData = require('./fixtures/bioData.json');
+import DeepModel from "../src/backbone-deep-model.mjs";
+import { expect } from "chai";
+import bioData from './fixtures/bioData.json' assert { type: 'json' };
 
 describe('DeepModel', function() {
 	describe('#trigger2 ', function() {
-		var triggeredEvents;
-		var model = new DeepModel(bioData);
+		let triggeredEvents;
+		const model = new DeepModel(bioData);
 		before(function() {
 			triggeredEvents = [];
 
@@ -36,7 +36,7 @@ describe('DeepModel', function() {
 	describe('#trigger d', function() {
 
 		it("set: Triggers model change:[attribute] events", function(done) {
-			var model = new DeepModel(bioData);
+			const model = new DeepModel(bioData);
 			model.on('change:id', function(model, val) {
 				expect(val).to.equal(456);
 				done();
@@ -48,7 +48,7 @@ describe('DeepModel', function() {
 
 
 		it("set: Triggers model change:[attribute] events", function(done) {
-			var model = new DeepModel(bioData);
+			const model = new DeepModel(bioData);
 			model.on('change:user.name.first', function(model, val) {
 				expect(val).to.equal('Lana');
 				done();
@@ -60,7 +60,7 @@ describe('DeepModel', function() {
 		});
 
 		it('set: Correct values passed to wildcard event handlers', function(done) {
-			var model = new DeepModel(bioData);
+			const model = new DeepModel(bioData);
 
 			model.on('change:user.name.first', function(model, val) {
 				expect(val).to.equal('Lana');
@@ -73,7 +73,7 @@ describe('DeepModel', function() {
 		});
 
 		it('set: Correct values passed to wildcard event handlers', function(done) {
-			var model = new DeepModel(bioData);
+			const model = new DeepModel(bioData);
 			model.on('change:user.name.*', function(model, val) {
 				expect(val).to.deep.equal({
 					first: 'Lana',
@@ -88,7 +88,7 @@ describe('DeepModel', function() {
 		});
 
 		it("set: Correct values passed to wildcard event handlers", function(done) {
-			var model = new DeepModel(bioData);
+			const model = new DeepModel(bioData);
 			model.on('change:user.*', function(model, val) {
 				expect(val).to.deep.equal({
 					name: {
@@ -110,9 +110,9 @@ describe('DeepModel', function() {
 	describe('#trigger', function() {
 
 		it("set: Trigger change events only once", function() {
-			var model = new DeepModel(bioData);
+			const model = new DeepModel(bioData);
 
-			var triggeredEvents = [];
+			const triggeredEvents = [];
 
 			model.on('all', function(changedAttr, model, val) {
 				triggeredEvents.push(changedAttr);
@@ -139,7 +139,7 @@ describe('DeepModel', function() {
 
 
 		it("should change:[attribute] event for parent keys (like wildcard)", function(done) {
-			var model = new DeepModel(bioData);
+			const model = new DeepModel(bioData);
 			model.on('change:user', function(model, val) {
 				expect(val).to.deep.equal({});
 				done()
@@ -148,16 +148,16 @@ describe('DeepModel', function() {
 		});
 
 		it("should change:[attribute] event for parent keys (like wildcard)", function(done) {
-			var model = new DeepModel(bioData);
+			const model = new DeepModel(bioData);
 			model.on('change:user', function(model, val) {
-				expect(val).to.equal.null;
+				expect(val).to.be.null;
 				done()
 			});
 			model.set('user', null);
 		});
 
 		it("should change:[attribute] event for parent keys (like wildcard)", function(done) {
-			var model = new DeepModel(bioData);
+			const model = new DeepModel(bioData);
 			model.on('change:user', function(model, val) {
 				expect(val).to.be.undefined;
 				done()
@@ -166,7 +166,7 @@ describe('DeepModel', function() {
 		});
 
 		it("should change:[attribute] event for parent keys (like wildcard)", function(done) {
-			var model = new DeepModel({
+			const model = new DeepModel({
 				id: 123,
 				user: {}
 			});
@@ -178,7 +178,7 @@ describe('DeepModel', function() {
 		});
 
 		it("should change:[attribute] event for parent keys (like wildcard)", function(done) {
-			var model = new DeepModel({
+			const model = new DeepModel({
 				id: 123,
 				user: null
 			});
@@ -190,7 +190,7 @@ describe('DeepModel', function() {
 		});
 
 		it("should change:[attribute] event for parent keys (like wildcard)", function(done) {
-			var model = new DeepModel({
+			const model = new DeepModel({
 				id: 123
 			});
 			model.on('change:user', function(model, val) {

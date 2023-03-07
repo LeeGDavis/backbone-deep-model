@@ -1,12 +1,12 @@
 'use strict';
-var DeepModel = require('../');
-var Backbone = require('backbone');
-var expect = require('chai').expect;
+import DeepModel from "../src/backbone-deep-model.mjs";
+import Backbone from "backbone";
+import { expect } from "chai";
 
 describe('DeepModel', function() {
 	describe('#defaults', function() {
 		it('defaults: with deep attributes', function() {
-			var DefaultsModel = DeepModel.extend({
+			const DefaultsModel = DeepModel.extend({
 				defaults: {
 					details: {
 						name: {
@@ -17,7 +17,7 @@ describe('DeepModel', function() {
 				}
 			});
 
-			var model1 = new DefaultsModel({
+			const model1 = new DefaultsModel({
 				details: {
 					name: {
 						first: 'John',
@@ -26,26 +26,26 @@ describe('DeepModel', function() {
 				}
 			});
 
-			var model2 = new DefaultsModel({
+			const model2 = new DefaultsModel({
 			});
 
 			expect(model1.get('details.name.first')).to.equal('John');
 			expect(model1.get('details.name.last')).to.equal('Smith');
 			expect(model1.get('details.name.initial')).to.equal('Z');
-			expect(model2.get('details.name.first')).to.be.empty;
+			expect(model2.get('details.name.first')).to.be.undefined;
 			expect(model2.get('details.name.last')).to.equal('Smith');
 			expect(model2.get('details.name.initial')).to.equal('J');
 		});
 
 
 		it('defaults: does not cause a problem with a collection in an attribute', function() {
-			var Model = DeepModel.extend({
+			const Model = DeepModel.extend({
 				defaults: {
 					foo: 'bar'
 				}
 			});
 
-			var model = new Model({
+			const model = new Model({
 				collection: new Backbone.Collection()
 			});
 

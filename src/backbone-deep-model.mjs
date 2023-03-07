@@ -1,15 +1,15 @@
-try {
-	var _ = require('underscore');
-} catch (e) {
-	var _ = window._;
-}
-try {
-	var Backbone = require('backbone');
-} catch (e) {
-	var Backbone = window.Backbone;
-}
-var merge = require('lodash.merge');
-var cloneDeep = require('lodash.clonedeep');
+/**'
+ * @author Lee Davis
+ *
+ * @requires _
+ * @requires Backbone
+ */
+
+import Backbone from 'backbone';
+import _ from 'underscore';
+import cloneDeep from 'lodash.clonedeep';
+import merge from 'lodash.merge';
+
 
 /**
  * Takes a nested object and returns a shallow object keyed with the path names
@@ -18,19 +18,19 @@ var cloneDeep = require('lodash.clonedeep');
  * @param  {Object}      Nested object e.g. { level1: { level2: 'value' } }
  * @return {Object}      Shallow object with path names e.g. { 'level1.level2': 'value' }
  */
-function objToPaths(obj) {
-	var ret = {},
+const objToPaths = function (obj) {
+	let ret = {},
 		separator = DeepModel.keyPathSeparator;
 
-	for (var key in obj) {
-		var val = obj[key];
+	for (let key in obj) {
+		let val = obj[key];
 
 		if (val && (val.constructor === Object || val.constructor === Array) && !_.isEmpty(val)) {
 			//Recursion for embedded objects
-			var obj2 = objToPaths(val);
+			const obj2 = objToPaths(val);
 
-			for (var key2 in obj2) {
-				var val2 = obj2[key2];
+			for (let key2 in obj2) {
+				let val2 = obj2[key2];
 
 				ret[key + separator + key2] = val2;
 			}
@@ -47,15 +47,15 @@ function objToPaths(obj) {
  * @param  {object} obj           to fetch attribute from
  * @param  {string} path          path e.g. 'user.name'
  * @param  {[type]} return_exists [description]
- * @return {mixed}                [description]
+ * @return {object}               [description]
  */
-function getNested(obj, path, return_exists) {
-	var separator = DeepModel.keyPathSeparator;
+const getNested = function (obj, path, return_exists) {
+	const separator = DeepModel.keyPathSeparator;
 
-	var fields = path ? path.split(separator) : [];
-	var result = obj;
+	const fields = path ? path.split(separator) : [];
+	let result = obj;
 	return_exists || (return_exists === false);
-	for (var i = 0, n = fields.length; i < n; i++) {
+	for (let i = 0, n = fields.length; i < n; i++) {
 		if (return_exists && !_.has(result, fields[i])) {
 			return false;
 		}
@@ -78,8 +78,6 @@ function getNested(obj, path, return_exists) {
 	return result;
 }
 
-
-
 /**
  * @param {Object} obj                Object to fetch attribute from
  * @param {String} path               Object path e.g. 'user.name'
@@ -87,15 +85,15 @@ function getNested(obj, path, return_exists) {
  * @param {Boolean} [options.unset]   Whether to delete the value
  * @param {Mixed}                     Value to set
  */
-function setNested(obj, path, val, options) {
+const setNested = function(obj, path, val, options) {
 	options = options || {};
 
-	var separator = DeepModel.keyPathSeparator;
+	const separator = DeepModel.keyPathSeparator;
 
-	var fields = path ? path.split(separator) : [];
-	var result = obj;
-	for (var i = 0, n = fields.length; i < n && result !== undefined; i++) {
-		var field = fields[i];
+	const fields = path ? path.split(separator) : [];
+	let result = obj;
+	for (let i = 0, n = fields.length; i < n && result !== undefined; i++) {
+		const field = fields[i];
 
 		//If the last in the path, set the value
 		if (i === n - 1) {
@@ -110,7 +108,7 @@ function setNested(obj, path, val, options) {
 					delete result[field]; // in case parent exists but is not an object
 					return;
 				}
-				var nextField = fields[i + 1];
+				let nextField = fields[i + 1];
 
 				// create array if next field is integer, else create object
 				result[field] = /^\d+$/.test(nextField) ? [] : {};
@@ -122,18 +120,18 @@ function setNested(obj, path, val, options) {
 	}
 }
 
-function deleteNested(obj, path) {
+const deleteNested = function(obj, path) {
 	setNested(obj, path, null, {
 		unset: true
 	});
 }
 
-var DeepModel = Backbone.Model.extend({
+const DeepModel = Backbone.Model.extend({
 
 	// Override constructor
 	// Support having nested defaults by using _.deepExtend instead of _.extend
 	constructor: function(attributes, options) {
-		var attrs = attributes || {};
+		let attrs = attributes || {};
 		this.cid = _.uniqueId('c');
 		this.attributes = {};
 		if (options && options.collection) this.collection = options.collection;
@@ -158,7 +156,7 @@ var DeepModel = Backbone.Model.extend({
 	// Override set
 	// Supports nested attributes via the syntax 'obj.attr' e.g. 'author.user.name'
 	set: function(key, val, options) {
-		var attr, attrs, unset, changes, silent, changing, prev, current;
+		let attrs;
 		if (key == null) return this;
 
 		// Handle both `"key", value` and `{key: value}` -style arguments.
@@ -175,17 +173,18 @@ var DeepModel = Backbone.Model.extend({
 		if (!this._validate(attrs, options)) return false;
 
 		// Extract attributes and options.
-		unset = options.unset;
-		silent = options.silent;
-		changes = [];
-		changing = this._changing;
+		const unset = options.unset;
+		const silent = options.silent;
+		const changes = [];
+		const changing = this._changing;
 		this._changing = true;
 
 		if (!changing) {
 			this._previousAttributes = merge({}, this.attributes); //<custom>: Replaced _.clone with _.deepClone
 			this.changed = {};
 		}
-		current = this.attributes, prev = this._previousAttributes;
+		const current = this.attributes
+		const prev = this._previousAttributes;
 
 		// Check for changes of `id`.
 		if (this.idAttribute in attrs) this.id = attrs[this.idAttribute];
@@ -195,7 +194,7 @@ var DeepModel = Backbone.Model.extend({
 		//</custom code>
 
 		// For each `set` attribute, update or delete the current value.
-		for (attr in attrs) {
+		for (let attr in attrs) {
 			val = attrs[attr];
 
 			//<custom code>: Using getNested, setNested and deleteNested
@@ -214,23 +213,23 @@ var DeepModel = Backbone.Model.extend({
 			if (changes.length) this._pending = true;
 
 			//<custom code>
-			var separator = DeepModel.keyPathSeparator;
-			var alreadyTriggered = {}; // * @restorer
+			const separator = DeepModel.keyPathSeparator;
+			const alreadyTriggered = {}; // * @restorer
 
-			for (var i = 0, l = changes.length; i < l; i++) {
-				var key = changes[i];
+			for (let i = 0, l = changes.length; i < l; i++) {
+				let key = changes[i];
 
 				if (!alreadyTriggered.hasOwnProperty(key) || !alreadyTriggered[key]) { // * @restorer
 					alreadyTriggered[key] = true; // * @restorer
 					this.trigger('change:' + key, this, getNested(current, key), options);
 				} // * @restorer
 
-				var fields = key.split(separator);
+				const fields = key.split(separator);
 
 				//Trigger change events for parent keys with wildcard (*) notation
-				for (var n = fields.length - 1; n > 0; n--) {
-					var parentKey = fields.slice(0, n).join(separator),
-						wildcardKey = parentKey + separator + '*';
+				for (let n = fields.length - 1; n > 0; n--) {
+					const parentKey = fields.slice(0, n).join(separator);
+					const wildcardKey = parentKey + separator + '*';
 
 					if (!alreadyTriggered.hasOwnProperty(wildcardKey) || !alreadyTriggered[wildcardKey]) { // * @restorer
 						alreadyTriggered[wildcardKey] = true; // * @restorer
@@ -263,8 +262,8 @@ var DeepModel = Backbone.Model.extend({
 	// Clear all attributes on the model, firing `"change"` unless you choose
 	// to silence it.
 	clear: function(options) {
-		var attrs = {};
-		var shallowAttributes = objToPaths(this.attributes);
+		const attrs = {};
+		const shallowAttributes = objToPaths(this.attributes);
 		for (var key in shallowAttributes) attrs[key] = void 0;
 		return this.set(attrs, _.extend({}, options, {
 			unset: true
@@ -291,15 +290,15 @@ var DeepModel = Backbone.Model.extend({
 		if (!diff) return this.hasChanged() ? objToPaths(this.changed) : false;
 		//</custom code>
 
-		var old = this._changing ? this._previousAttributes : this.attributes;
+		let old = this._changing ? this._previousAttributes : this.attributes;
 
 		//<custom code>
 		diff = objToPaths(diff);
 		old = objToPaths(old);
 		//</custom code>
 
-		var val, changed = false;
-		for (var attr in diff) {
+		let val, changed = false;
+		for (let attr in diff) {
 			if (_.isEqual(old[attr], (val = diff[attr]))) continue;
 			(changed || (changed = {}))[attr] = val;
 		}
@@ -328,4 +327,4 @@ var DeepModel = Backbone.Model.extend({
 DeepModel.keyPathSeparator = '.';
 
 
-module.exports = DeepModel;
+export default DeepModel;

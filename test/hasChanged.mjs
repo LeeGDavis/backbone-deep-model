@@ -1,7 +1,7 @@
 'use strict';
-var DeepModel = require('../');
-var Backbone = require('backbone');
-var expect = require('chai').expect;
+import DeepModel from "../src/backbone-deep-model.mjs";
+import Backbone from "backbone";
+import { expect } from "chai";
 
 describe('DeepModel', function() {
 
@@ -9,7 +9,7 @@ describe('DeepModel', function() {
 
 
 		it('hasChanged(): behaves as Model for top level attributes', function() {
-			var model = new Backbone.Model({
+			const model = new Backbone.Model({
 					test: 1
 				}),
 				deepModel = new DeepModel({
@@ -31,7 +31,7 @@ describe('DeepModel', function() {
 
 
 		it('hasChanged(): with deep attributes', function() {
-			var deepModel = new DeepModel({
+			const deepModel = new DeepModel({
 				foo: {
 					bar: 1
 				}
@@ -47,7 +47,7 @@ describe('DeepModel', function() {
 
 
 		it('hasChanged(attr): behaves as Model for top level attributes', function() {
-			var model = new Backbone.Model({
+			const model = new Backbone.Model({
 					test: 1
 				}),
 				deepModel = new DeepModel({
@@ -68,7 +68,7 @@ describe('DeepModel', function() {
 
 
 		it('hasChanged(attr): with deep attributes', function() {
-			var deepModel = new DeepModel({
+			const deepModel = new DeepModel({
 				foo: {
 					bar: 1
 				}
@@ -84,7 +84,7 @@ describe('DeepModel', function() {
 
 
 		it('hasChanged(attr): with unchanged deep attributes', function() {
-			var deepModel = new DeepModel({
+			const deepModel = new DeepModel({
 				foo: {
 					bar: 1
 				}
@@ -106,11 +106,11 @@ describe('DeepModel', function() {
 	describe('#hasChanged matching Backbone.Model', function() {
 
 		it('hasChanged(): matches Model behaviour - when not changed', function() {
-			var model = new Backbone.Model({
+			const model = new Backbone.Model({
 				foo: 'bar'
 			});
 
-			var deepModel = new DeepModel({
+			const deepModel = new DeepModel({
 				foo: 'bar',
 				user: {
 					first: 'John',
@@ -122,11 +122,11 @@ describe('DeepModel', function() {
 
 
 		it('hasChanged(): matches Model behaviour - when changed', function() {
-			var model = new Backbone.Model({
+			const model = new Backbone.Model({
 				foo: 'bar'
 			});
 
-			var deepModel = new DeepModel({
+			const deepModel = new DeepModel({
 				foo: 'bar',
 				user: {
 					first: 'John',
@@ -142,11 +142,11 @@ describe('DeepModel', function() {
 		});
 
 		it('hasChanged(attr): matches Model behaviour - when not changed', function() {
-			var model = new Backbone.Model({
+			const model = new Backbone.Model({
 				foo: 'bar'
 			});
 
-			var deepModel = new DeepModel({
+			const deepModel = new DeepModel({
 				foo: 'bar',
 				user: {
 					first: 'John',
@@ -163,11 +163,11 @@ describe('DeepModel', function() {
 
 
 		it('hasChanged(attr): matches Model behaviour - when changed', function() {
-			var model = new Backbone.Model({
+			const model = new Backbone.Model({
 				foo: 'bar'
 			});
 
-			var deepModel = new DeepModel({
+			const deepModel = new DeepModel({
 				foo: 'bar',
 				user: {
 					first: 'John',
